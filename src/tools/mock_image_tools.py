@@ -9,6 +9,7 @@ class MockImageAnalyzer:
 
     def run(self, eval_case: EvalCase, task_spec: TaskSpec) -> dict:
         mock = eval_case.output.get("mock_evidence", {})
+        dataset_annotations = eval_case.output.get("dataset_annotations", {})
         return {
             "caption": mock.get("caption", "Generated image matching the requested scene."),
             "objects": mock.get("objects", []),
@@ -16,6 +17,7 @@ class MockImageAnalyzer:
             "artifacts": mock.get("artifacts", []),
             "composition_quality": mock.get("composition_quality", "good"),
             "prompt_alignment_signals": mock.get("prompt_alignment_signals", []),
+            "dataset_annotations": dataset_annotations,
         }
 
 

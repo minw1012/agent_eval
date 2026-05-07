@@ -1,0 +1,65 @@
+{
+  "case_id": "diffusiondb_geodesic_landscape_001",
+  "prompt": "geodesic landscape, john chamberlain, christopher balaskas, tadao ando, 4 k, ",
+  "output_modality": "image",
+  "linked_rubric_id": "generated_diffusiondb_art_v1",
+  "output": {
+    "type": "dataset_image",
+    "asset_path": "hf://poloclub/diffusiondb/images/part-000001/f3501e05-aef7-4225-a9e9-f516527408ac.png",
+    "dataset_annotations": {
+      "dataset": "poloclub/diffusiondb",
+      "dataset_url": "https://huggingface.co/datasets/poloclub/diffusiondb",
+      "project_url": "https://poloclub.github.io/diffusiondb/",
+      "image_name": "f3501e05-aef7-4225-a9e9-f516527408ac.png",
+      "part_id": "part-000001",
+      "prompt": "geodesic landscape, john chamberlain, christopher balaskas, tadao ando, 4 k, ",
+      "seed": 38753269,
+      "cfg": 12.0,
+      "steps": 50,
+      "sampler": "k_lms"
+    },
+    "mock_evidence": {
+      "caption": "A stylized geodesic landscape with abstract sculptural forms and architectural composition.",
+      "objects": [
+        "landscape",
+        "abstract forms",
+        "architectural structure"
+      ],
+      "style": "geodesic architectural digital art",
+      "artifacts": [],
+      "composition_quality": "good",
+      "prompt_alignment_signals": [
+        "geodesic landscape",
+        "abstract sculptural forms",
+        "architectural influence",
+        "high-resolution digital art"
+      ],
+      "ocr_text": "",
+      "ocr_confidence": 0.0,
+      "text_legibility": "not_applicable",
+      "safety_flags": [],
+      "risk_level": "low"
+    }
+  },
+  "metadata": {
+    "source": "DiffusionDB Hugging Face dataset card sample",
+    "dataset": "poloclub/diffusiondb",
+    "dataset_url": "https://huggingface.co/datasets/poloclub/diffusiondb",
+    "project_url": "https://poloclub.github.io/diffusiondb/",
+    "model_version": "Stable Diffusion",
+    "prompt_version": "diffusiondb-card-sample"
+  },
+  "eval_spec": {
+    "task_type": "image_generation",
+    "constraints": {
+      "source_dataset": "DiffusionDB",
+      "expected_prompt_alignment": [
+        "geodesic landscape",
+        "john chamberlain",
+        "christopher balaskas",
+        "tadao ando",
+        "4k quality"
+      ]
+    }
+  }
+}

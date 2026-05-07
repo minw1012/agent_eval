@@ -12,9 +12,9 @@ The demo intentionally uses mock image, OCR, and safety tools. The interfaces ar
 
 This repo implements the Phase 1 rule-based loop from `agent_based_multimodal_eval_system_v2.md`:
 
-1. Load an eval case with prompt, model output, modality, and metadata.
-2. Load a portable image-generation rubric from config.
-3. Parse the prompt into structured task intent, such as required text and negative constraints.
+1. Generate or edit a portable rubric from user quality requirements.
+2. Load eval cases from hand-written examples or a public online dataset sample.
+3. Parse each prompt into structured task intent, such as required text and negative constraints.
 4. Plan which tools to run based on modality, prompt constraints, and rubric requirements.
 5. Extract structured evidence with mock image analysis, OCR, and safety tools.
 6. Run deterministic hard checks for safety, exact rendered text, and forbidden visual elements.
@@ -44,6 +44,69 @@ For example, if the prompt says `Include "SPRING SALE"` and `no logos`, the syst
 - **Hard Constraints**: deterministic pass/fail checks for requirements like safety and exact text.
 - **Soft Scores**: weighted quality dimensions such as prompt alignment, visual quality, text rendering, and user acceptability.
 - **Eval Report**: the final JSON artifact with pass/fail, overall score, failure modes, recommendation, evidence, and tool versions.
+
+## Generate A Rubric
+
+Create a draft rubric from natural-language requirements:
+
+```bash
+python3 rubric_generator.py \
+  --requirements "Evaluate image outputs for prompt alignment, visual coherence, safety, and user acceptability. No rendered text is required." \
+  --rubric-id custom_image_art_v1 \
+  --name "Custom Image Art Rubric" \
+  --output configs/rubrics/custom_image_art_v1.yaml
+```
+
+The generated rubric is a draft. Review and edit it before using it for reproducible eval runs.
+
+You can also make it interactive:
+
+```bash
+python3 rubric_generator.py --interactive
+```
+
+Optional model-backed generation is supported if you provide an API key and a model id:
+
+```bash
+OPENAI_API_KEY=... python3 rubric_generator.py \
+  --provider openai \
+  --model <model-id> \
+  --requirements "Create a strict image-generation rubric for ecommerce product images." \
+  --output configs/rubrics/ecommerce_image_v1.yaml
+```
+
+The model path uses the same rubric schema as the template path, and the output is still marked as `human_review_status: draft`.
+
+## Public Dataset Example
+
+The repo includes a real online dataset example from DiffusionDB, a large-scale text-to-image prompt/image dataset:
+
+- Dataset card: https://huggingface.co/datasets/poloclub/diffusiondb
+- Project page: https://poloclub.github.io/diffusiondb/
+
+The imported sample case is:
+
+```text
+cases/golden/diffusiondb_geodesic_landscape_001.json
+```
+
+It includes DiffusionDB metadata such as source dataset, image name, prompt, seed, cfg, steps, and sampler. The current demo still uses mock evidence extraction, but the case is shaped so real image/VLM tools can later consume the dataset image and replace the mock evidence.
+
+Regenerate the sample case:
+
+```bash
+python3 dataset_importer.py \
+  --dataset diffusiondb \
+  --output cases/golden/diffusiondb_geodesic_landscape_001.json
+```
+
+Run the DiffusionDB sample with a generated rubric:
+
+```bash
+python3 runner.py \
+  --case cases/golden/diffusiondb_geodesic_landscape_001.json \
+  --rubric configs/rubrics/generated_diffusiondb_art_v1.yaml
+```
 
 ## Run
 
@@ -81,8 +144,12 @@ python3 -m unittest discover tests
 ## Files
 
 - `configs/rubrics/image_generation_general_v1.yaml`: portable rubric config.
+- `configs/rubrics/generated_diffusiondb_art_v1.yaml`: generated draft rubric for DiffusionDB-style art images.
 - `cases/golden/golden_image_001.json`: passing image eval case.
+- `cases/golden/diffusiondb_geodesic_landscape_001.json`: public dataset image eval case.
 - `cases/regression/regression_image_missing_text_001.json`: hard failure for missing exact text.
+- `rubric_generator.py`: generate a draft rubric from user requirements.
+- `dataset_importer.py`: import public dataset examples as eval cases.
 - `src/agents/`: intent parsing, tool planning, and eval orchestration.
 - `src/tools/`: mock evidence extraction tools.
 - `src/evaluators/`: hard checks and soft score aggregation.
