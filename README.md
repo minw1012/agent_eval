@@ -62,14 +62,52 @@ python3 runner.py \
   --rubric configs/rubrics/generated_diffusiondb_art_v1.yaml
 ```
 
-Example output:
+## Demo
 
-```text
+Built-in image eval:
+
+```console
+$ python3 runner.py \
+    --case cases/golden/golden_image_001.json \
+    --rubric configs/rubrics/image_generation_general_v1.yaml
+
 Case: golden_image_001
 Pass: true
 Overall score: 4.95
 Recommendation: Accept
 Report saved to reports/golden_image_001/result.json
+```
+
+Public DiffusionDB sample:
+
+```console
+$ python3 runner.py \
+    --case cases/golden/diffusiondb_geodesic_landscape_001.json \
+    --rubric configs/rubrics/generated_diffusiondb_art_v1.yaml
+
+Case: diffusiondb_geodesic_landscape_001
+Pass: true
+Overall score: 4.95
+Recommendation: Accept
+Report saved to reports/diffusiondb_geodesic_landscape_001/result.json
+```
+
+Report preview:
+
+```json
+{
+  "case_id": "golden_image_001",
+  "passed": true,
+  "overall_score": 4.95,
+  "recommendation": "Accept",
+  "failure_modes": [],
+  "rubric_version": "image_generation_general_v1@1.0",
+  "tool_versions": {
+    "image_analyzer": "mock-image-analyzer-v1",
+    "ocr": "mock-ocr-v1",
+    "safety_checker": "mock-safety-checker-v1"
+  }
+}
 ```
 
 ## Generate A Rubric
